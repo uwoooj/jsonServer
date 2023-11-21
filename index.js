@@ -3,7 +3,9 @@ const cors = require("cors");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const { log } = require("console");
+const axios = require('axios');
 const app = express();
+
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,6 +40,15 @@ app.delete("/abc/:id", function (req, res) {
 
 app.post("/insert", function (req, res) {
   res.send(data.insert(req.body));
+});
+
+app.get("/endgame", async function (req, res) {
+  const key = "095E77F5939B44CE8D0B9CAF5C219B20";
+
+  const {word} = req.query;
+  const d = await axios.get(`https://opendict.korean.go.kr/api/search?key=${key}&q=${word}&req_type=json&start=1&num=100`)
+                                              
+  res.send(d.data);
 });
 
 app.listen(3000);
